@@ -28,6 +28,9 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa") // (สำหรับ JPA ในขั้นต่อไป)
     runtimeOnly("org.postgresql:postgresql:42.7.4")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+
+    implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("org.springframework.security:spring-security-crypto") // BCrypt
 }
 
 tasks.withType<Test> {
