@@ -44,4 +44,20 @@ public class UserRepository {
             return Optional.empty();
         }
     }
+
+    public Optional<UserAuthRow> findAuthByEmail(String email) {
+        try {
+            return Optional.ofNullable(
+                    jdbc.queryForObject(
+                            "SELECT user_id, password_hash FROM users WHERE email = ?",
+                            (rs, n) -> new UserAuthRow(rs.getInt("user_id"), rs.getString("password_hash")),
+                            email
+                    )
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
+    }
+    public record UserAuthRow(Integer userId, String passwordHash) {}
+
 }

@@ -18,4 +18,14 @@ public class AuthService {
         String hash = encoder.encode(rawPassword);
         return users.insertUser(email, hash, displayName);
     }
+
+    public Integer login(String email, String rawPassword) {
+        var rowOpt = users.findAuthByEmail(email);
+        if (rowOpt.isEmpty()) return null;                       // Cant Find email in DB
+
+        var row = rowOpt.get();
+        boolean ok = encoder.matches(rawPassword, row.passwordHash());
+        return ok ? row.userId() : null;
+    }
+
 }
