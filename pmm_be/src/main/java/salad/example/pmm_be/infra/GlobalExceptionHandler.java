@@ -3,7 +3,9 @@ package salad.example.pmm_be.infra;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.dao.DataIntegrityViolationException;
 
@@ -44,4 +46,10 @@ public class GlobalExceptionHandler {
                 .body(Map.of("message", "Unexpected error", "detail", ex.getMessage()));
     }
 
+    @ExceptionHandler(MissingRequestHeaderException.class)
+    public ResponseEntity<?> handleMissingHeader(MissingRequestHeaderException ex) {
+        // ex.getHeaderName() จะได้ชื่อ header ที่หายไป เช่น "X-User-Id"
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Map.of("message", ex.getHeaderName() + " is required"));
+    }
 }
