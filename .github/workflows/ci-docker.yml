@@ -31,7 +31,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: test-report
-          path: pmm_br/build/reports/tests/test/   # <<< ชี้ path ให้ตรง
+          path: pmm_be/build/reports/tests/test/
 
   docker:
     runs-on: ubuntu-latest
@@ -55,7 +55,7 @@ jobs:
       - name: Build & Push Docker
         uses: docker/build-push-action@v6
         with:
-          context: ./pmm_br    # <<< Dockerfile อยู่ใน pmm_br
+          context: ./pmm_be
           push: true
           tags: |
             ${{ steps.vars.outputs.latest }}
