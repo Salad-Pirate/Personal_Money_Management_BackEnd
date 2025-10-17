@@ -76,4 +76,18 @@ public class CategoryRepository {
         if (c == null || c.isBlank()) return null;
         return c.startsWith("#") ? c : ("#" + c);
     }
+
+    public int update(Integer userId, Integer categoryId, String name, String type, String color) {
+        String sql = """
+        update categories
+        set category_name = ?, category_type = ?, color_hex = ?
+        where user_id = ? and category_id = ?
+    """;
+        return jdbc.update(sql,
+                name,
+                type,
+                (color == null || color.isBlank()) ? null : (color.startsWith("#") ? color : "#" + color),
+                userId,
+                categoryId);
+    }
 }
