@@ -61,4 +61,15 @@ public class WalletController {
         Integer userId = resolveUserId(userHeader);
         service.delete(userId, walletId);
     }
+
+    @PutMapping("/{walletId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateWallet(
+            @RequestHeader(name = "X-User-Id") String userHeader,
+            @PathVariable Integer walletId,
+            @Valid @RequestBody WalletRequest req
+    ) {
+        Integer userId = resolveUserId(userHeader);
+        service.update(userId, walletId, req);
+    }
 }

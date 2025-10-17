@@ -82,4 +82,16 @@ public class WalletRepository {
         if (c == null || c.isBlank()) return null;
         return c.startsWith("#") ? c : ("#" + c);
     }
+
+    public int update(Integer userId, Integer walletId, String name, String type,
+                      java.math.BigDecimal balance, String color) {
+        String sql = """
+        update wallets
+        set wallet_name = ?, wallet_type = ?, starting_balance = ?, color_hex = ?
+        where user_id = ? and wallet_id = ?
+    """;
+        return jdbc.update(sql, name, type, balance,
+                (color == null || color.isBlank()) ? null : (color.startsWith("#") ? color : "#" + color),
+                userId, walletId);
+    }
 }

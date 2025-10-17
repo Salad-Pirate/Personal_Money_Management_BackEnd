@@ -47,4 +47,20 @@ public class WalletService {
         int rows = repo.delete(userId, walletId);
         if (rows == 0) throw new IllegalArgumentException("Wallet not found");
     }
+
+    @Transactional
+    public void update(Integer userId, Integer walletId, WalletRequest req) {
+
+        int rows = repo.update(
+                userId, walletId,
+                req.getName().trim(),
+                req.getType().trim(),
+                req.getBalance(),
+                req.getColor()
+        );
+
+        if (rows == 0) {
+            throw new IllegalArgumentException("Wallet not found or not belong to this user");
+        }
+    }
 }
