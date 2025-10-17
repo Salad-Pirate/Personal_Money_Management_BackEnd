@@ -55,4 +55,15 @@ public class CategoryController {
     ) {
         service.delete(resolveUserId(userHeader), id);
     }
+
+    @PutMapping("/{categoryId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateCategory(
+            @RequestHeader(name = "X-User-Id") String userHeader,
+            @PathVariable Integer categoryId,
+            @Valid @RequestBody CategoryRequest req
+    ) {
+        Integer userId = Integer.valueOf(userHeader);
+        service.update(userId, categoryId, req);
+    }
 }

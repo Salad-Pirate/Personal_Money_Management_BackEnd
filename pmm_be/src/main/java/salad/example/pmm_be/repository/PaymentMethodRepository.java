@@ -75,4 +75,17 @@ public class PaymentMethodRepository {
         if (c == null || c.isBlank()) return null;
         return c.startsWith("#") ? c : ("#" + c);
     }
+
+    public int update(Integer userId, Integer paymentMethodId, String name, String color) {
+        String sql = """
+        update payment_methods
+        set payment_method_name = ?, color_hex = ?
+        where user_id = ? and payment_method_id = ?
+    """;
+        return jdbc.update(sql,
+                name,
+                (color == null || color.isBlank()) ? null : (color.startsWith("#") ? color : "#" + color),
+                userId,
+                paymentMethodId);
+    }
 }

@@ -55,4 +55,15 @@ public class PaymentMethodController {
     ) {
         service.delete(resolveUserId(userHeader), id);
     }
+
+    @PutMapping("/{paymentMethodId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updatePaymentMethod(
+            @RequestHeader(name = "X-User-Id") String userHeader,
+            @PathVariable Integer paymentMethodId,
+            @Valid @RequestBody PaymentMethodRequest req
+    ) {
+        Integer userId = Integer.valueOf(userHeader);
+        service.update(userId, paymentMethodId, req);
+    }
 }

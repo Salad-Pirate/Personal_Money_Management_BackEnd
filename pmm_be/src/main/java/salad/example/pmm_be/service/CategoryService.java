@@ -40,4 +40,27 @@ public class CategoryService {
         int rows = repo.delete(userId, categoryId);
         if (rows == 0) throw new IllegalArgumentException("Category not found");
     }
+
+    @Transactional
+    public void update(Integer userId, Integer categoryId, CategoryRequest req) {
+        // ป้องกันชื่อซ้ำใน user เดียวกัน
+        if (repo.existsName(userId, req.getName().trim())) {
+            var current = repo.findOne(userId, categoryId);
+            if (current.isEmpty() || !current.get().getName().equalsIgnoreCase(req.getName().trim())) {
+                throw new IllegalArgumentException("Category name already exists for this user");
+            }
+        }
+
+        int rows = repo.update(
+                userId,
+                categoryId,
+                req.getName().trim(),
+                req.getType().trim(),
+                req.getColor()
+        );
+
+        if (rows == 0) {
+            throw new IllegalArgumentException("Category not found or not belong to this user");
+        }
+    }
 }

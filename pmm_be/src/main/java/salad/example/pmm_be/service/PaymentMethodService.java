@@ -40,4 +40,26 @@ public class PaymentMethodService {
         int rows = repo.delete(userId, paymentMethodId);
         if (rows == 0) throw new IllegalArgumentException("Payment method not found");
     }
+
+    @Transactional
+    public void update(Integer userId, Integer paymentMethodId, PaymentMethodRequest req) {
+        // ตรวจชื่อซ้ำใน user เดียวกัน
+        if (repo.existsName(userId, req.getName().trim())) {
+            var current = repo.findOne(userId, paymentMethodId);
+            if (current.isEmpty() || !current.get().getName().equalsIgnoreCase(req.getName().trim())) {
+                throw new IllegalArgumentException("Payment method name already exists for this user");
+            }
+        }
+
+        int rows = repo.update(
+                userId,
+                paymentMethodId,
+                req.getName().trim(),
+                req.getColor()
+        );
+
+        if (rows == 0) {
+            throw new IllegalArgumentException("Payment method not found or not belong to this user");
+        }
+    }
 }
