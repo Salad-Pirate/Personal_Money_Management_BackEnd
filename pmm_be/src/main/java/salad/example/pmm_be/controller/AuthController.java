@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import salad.example.pmm_be.repository.UserRepository;
 import salad.example.pmm_be.request.RegisterRequest;
 import salad.example.pmm_be.request.LoginRequest;
 import salad.example.pmm_be.response.RegisterResponse;
@@ -33,11 +34,12 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest req) {
-        Integer userId = auth.login(req.email(), req.password());
-        if (userId == null) {
+        UserRepository.UserAuthRow authRow = auth.login(req.email(), req.password());
+
+        if (authRow == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(new ErrorMessage("Invalid email or password"));
         }
-        return ResponseEntity.ok(new salad.example.pmm_be.response.LoginResponse(userId));
+        return ResponseEntity.ok(new LoginResponse(authRow.userId(), authRow.displayName()));
     }
 }
