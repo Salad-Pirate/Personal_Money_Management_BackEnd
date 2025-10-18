@@ -49,8 +49,8 @@ public class UserRepository {
         try {
             return Optional.ofNullable(
                     jdbc.queryForObject(
-                            "SELECT user_id, password_hash FROM users WHERE email = ?",
-                            (rs, n) -> new UserAuthRow(rs.getInt("user_id"), rs.getString("password_hash")),
+                            "SELECT user_id, password_hash, display_name FROM users WHERE email = ?",
+                            (rs, n) -> new UserAuthRow(rs.getInt("user_id"), rs.getString("password_hash"),rs.getString("display_name")),
                             email
                     )
             );
@@ -58,6 +58,6 @@ public class UserRepository {
             return Optional.empty();
         }
     }
-    public record UserAuthRow(Integer userId, String passwordHash) {}
+    public record UserAuthRow(Integer userId, String passwordHash, String displayName) {}
 
 }
