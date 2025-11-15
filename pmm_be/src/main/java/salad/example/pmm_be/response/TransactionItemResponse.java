@@ -24,6 +24,9 @@ public class TransactionItemResponse {
     private String transactionLocation;
     private String note;
 
+    private Double latitude;
+    private Double longitude;
+
     // getters
 
     public Integer getTransactionId() {
@@ -82,6 +85,10 @@ public class TransactionItemResponse {
         return note;
     }
 
+    public Double getLatitude() {return latitude;}
+
+    public Double getLongitude() {return longitude;}
+
     // setters
 
     public void setTransactionId(Integer transactionId) {
@@ -139,4 +146,8 @@ public class TransactionItemResponse {
     public void setNote(String note) {
         this.note = note;
     }
+
+    public void setLatitude(Double latitude) {this.latitude = latitude;}
+
+    public void setLongitude(Double longitude) {this.longitude = longitude;}
 }

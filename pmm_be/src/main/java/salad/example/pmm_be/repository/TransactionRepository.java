@@ -49,6 +49,8 @@ public class TransactionRepository {
                 r.setOccuredAt(rs.getObject("occured_at", OffsetDateTime.class));
                 r.setTransactionLocation(rs.getString("transaction_location"));
                 r.setNote(rs.getString("note"));
+                r.setLatitude(rs.getObject("latitude", Double.class));
+                r.setLongitude(rs.getObject("longitude", Double.class));
                 return r;
             }
         };
@@ -59,8 +61,8 @@ public class TransactionRepository {
         String insert = """
             insert into transactions
             (user_id, category_id, payment_method_id, wallet_id,
-             amount, transaction_type, occured_at, transaction_location, note)
-            values (?, ?, ?, ?, ?, ?, ?, ?, ?)
+             amount, transaction_type, occured_at, transaction_location, note, latitude, longitude)
+            values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             returning transaction_id
         """;
         Integer newId = jdbc.queryForObject(
@@ -73,7 +75,9 @@ public class TransactionRepository {
                 req.getType(),
                 req.getOccuredAt(),
                 req.getTransactionLocation(),
-                req.getNote()
+                req.getNote(),
+                req.getLatitude(),
+                req.getLongitude()
         );
         return findOne(userId, newId);
     }
@@ -151,7 +155,9 @@ public class TransactionRepository {
           t.transaction_type,
           t.occured_at,
           t.transaction_location,
-          t.note
+          t.note,
+          t.latitude,
+          t.longitude
         from transactions t
         join categories c
           on c.user_id = t.user_id and c.category_id = t.category_id
